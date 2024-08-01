@@ -1,0 +1,33 @@
+
+name: Ballerina Build and Test
+run-name: Receiving Workflow  [${{ inputs.uniqueWorkflowBuildId }}] 
+
+on:
+  workflow_dispatch:
+    inputs:
+      uniqueWorkflowBuildId:
+        description: 'Unique workflow build id'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          repository: "sameerajayasoma/choreo-sample-1"
+      - name: Get the latest commit SHA of another repository
+        id: get-sha
+        run: echo "OTHER_REPO_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      - name: Test package
+        uses: ballerina-platform/ballerina-action@2201.8.6
+        with:
+          args: test
+      - name: test package
+        uses: ballerina-platform/ballerina-action@2201.8.6
+        with:
+          args: build
